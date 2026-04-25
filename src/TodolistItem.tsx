@@ -1,7 +1,6 @@
 import type {FilterValues, Task} from './App'
 import {Button} from './Button'
-import {useState} from "react";
-
+import {useRef} from "react";
 
 type Props = {
     taskCount: number
@@ -20,35 +19,21 @@ export const TodolistItem = ({
                                  createTask,
                                  taskCount,
                              }: Props) => {
-    const [taskInput, setTaskInput] = useState("")
-    // alert(taskInput)
-    const createTaskHandler = () => {
-        createTask(taskInput)
-        setTaskInput("")
-    }
-    const validationTasks = taskInput.length === 0
-
+    const inputRef = useRef<HTMLInputElement>(null)
     return (
         <div>
             <h3>{title}</h3>
-            <span>{taskCount}</span>
+            {taskCount}
             <div>
-                <input
-                    value={taskInput}
-                    onChange={(e) => setTaskInput(e.currentTarget.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && !validationTasks) {
-                            createTaskHandler()
-                        }
-                    }}
-                />
+                <input ref={inputRef}/>
                 <Button
                     title={'+'}
-                    disabled={validationTasks}
-                    onClick={createTaskHandler}/>
-                {validationTasks && <div>Enter never main</div>}
-                {taskInput.length < 15 && <div>Vax message is 15</div>}
-                {Boolean(taskInput.length >= 15) && <div style={{color: "red"}}>Message too long</div>}
+                    onClick={() => {
+                        if (inputRef.current) {
+                            createTask(inputRef.current.value)
+                            inputRef.current.value = ""
+                        }
+                    }}/>
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>

@@ -42,7 +42,8 @@ export const App = () => {
             title: title,
             isDone: false
         }
-        const nextTasksState: Task[] = [newTask, ...tasks]
+
+        const nextTasksState = [newTask, ...tasks]
         setTasks(nextTasksState)
         createTaskCount.current = createTaskCount.current + 1
     }
