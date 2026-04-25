@@ -4,12 +4,12 @@ import {useState} from "react";
 
 
 type Props = {
-    taskCount: number
     title: string
     tasks: Task[]
     deleteTask: (taskId: string) => void
     changeFilter: (filter: FilterValues) => void
     createTask: (title: Task["title"]) => void
+    count: number
 }
 
 export const TodolistItem = ({
@@ -18,36 +18,34 @@ export const TodolistItem = ({
                                  deleteTask,
                                  changeFilter,
                                  createTask,
-                                 taskCount,
+                                 count,
                              }: Props) => {
-
-    const [inputTask, setInputTask] = useState("")
-    // alert(inputTask)
-    const createTaskHandler = () => {
-        createTask(inputTask)
-        setInputTask("")
-    }
-
-    const isEmpty = inputTask.length === 0
-    const isTooLong = inputTask.length > 15
+    const [inputTasks, setInputTasks] = useState("")
+    const isEmpty = inputTasks.length === 0
+    const isTooLong = inputTasks.length >= 15
     const isDisabled = isEmpty || isTooLong
-
     return (
         <div>
             <h3>{title}</h3>
-            {taskCount}
+            <span>{count}</span>
             <div>
                 <input
-                    value={inputTask}
-                    onChange={(e) => setInputTask(e.currentTarget.value)}
+                    value={inputTasks}
+                    onChange={(e) => {
+                        setInputTasks(e.currentTarget.value)
+
+                    }}
                 />
                 <Button
                     title={'+'}
                     disabled={isDisabled}
-                    onClick={createTaskHandler}/>
-                {isEmpty && <div>Enter some worlds</div>}
-                {isTooLong && <div>Max length string is 15</div>}
-                {!isEmpty && isTooLong && <div style={{color: "red"}}>Too long</div>}
+                    onClick={() => {
+                        createTask(inputTasks)
+                        setInputTasks("")
+                    }}
+                />
+                {isEmpty && <div>Enter something</div>}
+                {isTooLong && <div style={{color: "red"}}>Max length is 15</div>}
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
