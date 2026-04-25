@@ -1,6 +1,7 @@
 import type {FilterValues, Task} from './App'
 import {Button} from './Button'
-import {useRef} from "react";
+import {useState} from "react";
+
 
 type Props = {
     taskCount: number
@@ -19,21 +20,34 @@ export const TodolistItem = ({
                                  createTask,
                                  taskCount,
                              }: Props) => {
-    const inputRef = useRef<HTMLInputElement>(null)
+
+    const [inputTask, setInputTask] = useState("")
+    // alert(inputTask)
+    const createTaskHandler = () => {
+        createTask(inputTask)
+        setInputTask("")
+    }
+
+    const isEmpty = inputTask.length === 0
+    const isTooLong = inputTask.length > 15
+    const isDisabled = isEmpty || isTooLong
+
     return (
         <div>
             <h3>{title}</h3>
             {taskCount}
             <div>
-                <input ref={inputRef}/>
+                <input
+                    value={inputTask}
+                    onChange={(e) => setInputTask(e.currentTarget.value)}
+                />
                 <Button
                     title={'+'}
-                    onClick={() => {
-                        if (inputRef.current) {
-                            createTask(inputRef.current.value)
-                            inputRef.current.value = ""
-                        }
-                    }}/>
+                    disabled={isDisabled}
+                    onClick={createTaskHandler}/>
+                {isEmpty && <div>Enter some worlds</div>}
+                {isTooLong && <div>Max length string is 15</div>}
+                {!isEmpty && isTooLong && <div style={{color: "red"}}>Too long</div>}
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
