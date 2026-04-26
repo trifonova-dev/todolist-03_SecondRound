@@ -15,7 +15,7 @@ export type FilterValues = 'all' | 'active' | 'completed'
 
 export const App = () => {
     const [filter, setFilter] = useState<FilterValues>('all')
-    const tasksCounter = React.useRef(4)
+    const tasksCount = React.useRef(4)
 
     const [tasks, setTasks] = useState<Task[]>([
         {id: v1(), title: 'HTML&CSS', isDone: true},
@@ -44,7 +44,7 @@ export const App = () => {
         }
         const nextTasksState = [newTask, ...tasks]
         setTasks(nextTasksState)
-        tasksCounter.current = tasksCounter.current + 1
+        tasksCount.current = tasksCount.current + 1
     }
 
     return (
@@ -54,8 +54,7 @@ export const App = () => {
                           deleteTask={deleteTask}
                           changeFilter={changeFilter}
                           createTask={createTask}
-                          count={tasksCounter.current}
-            />
+                          count={tasksCount.current}/>
         </div>
     )
 }

@@ -12,37 +12,37 @@ type Props = {
 }
 
 export const TodolistItem = ({
-                                 count,
                                  title,
+                                 count,
                                  tasks,
                                  deleteTask,
                                  changeFilter,
                                  createTask
                              }: Props) => {
-    const [inputTask, setInputTask] = useState("")
-    // alert(inputTask)
-    const isEmpty = inputTask.length === 0
-    const isTooLong = inputTask.length >= 15
+    const [taskInput, setTaskInput] = useState("")
+    // alert(taskInput)
+    const createTaskHandler = () => {
+        createTask(taskInput)
+        setTaskInput("")
+    }
+    const isEmpty = taskInput.length === 0
+    const isTooLong = taskInput.length >= 15
     const isDisabled = isEmpty || isTooLong
     return (
         <div>
             <h3>{title}</h3>
-            {count}
+            <span>{count}</span>
             <div>
                 <input
-                    value={inputTask}
-                    onChange={(e) => setInputTask(e.currentTarget.value)}
+                    value={taskInput}
+                    onChange={(e) => setTaskInput(e.currentTarget.value)}
                 />
                 <Button
                     title={'+'}
                     disabled={isDisabled}
-                    onClick={() => {
-                        createTask(inputTask)
-                        setInputTask("")
-                    }}
-                />
-                {isEmpty && <div>Enter some worlds</div>}
-                {isTooLong && <div style={{color: "red"}}>Password can be 15</div>}
+                    onClick={createTaskHandler}/>
+                {isEmpty && <div>Введите ну хоть что-нибудь...</div>}
+                {isTooLong && <div style={{color: "red"}}>Братан, пароль малость длинноват</div>}
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
