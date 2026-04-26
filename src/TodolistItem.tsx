@@ -17,48 +17,60 @@ export const TodolistItem = ({
                                  tasks,
                                  deleteTask,
                                  changeFilter,
-                                 createTask
+                                 createTask,
                              }: Props) => {
-    const [taskInput, setTaskInput] = useState("")
-    // alert(taskInput)
+    const [inputTask, setInputTask] = useState("")
+    // alert(inputTask)
     const createTaskHandler = () => {
-        createTask(taskInput)
-        setTaskInput("")
+        createTask(inputTask)
+        setInputTask("")
     }
-    const isEmpty = taskInput.length === 0
-    const isTooLong = taskInput.length >= 15
+
+    const isEmpty = inputTask.length === 0
+    const isTooLong = inputTask.length >= 15
     const isDisabled = isEmpty || isTooLong
+
     return (
         <div>
             <h3>{title}</h3>
             <span>{count}</span>
             <div>
                 <input
-                    value={taskInput}
-                    onChange={(e) => setTaskInput(e.currentTarget.value)}
-                />
+                    value={inputTask}
+                    onChange={(e) => setInputTask(e.currentTarget.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            createTaskHandler()
+                        }
+                    }}/>
                 <Button
                     title={'+'}
                     disabled={isDisabled}
                     onClick={createTaskHandler}/>
-                {isEmpty && <div>Введите ну хоть что-нибудь...</div>}
-                {isTooLong && <div style={{color: "red"}}>Братан, пароль малость длинноват</div>}
+                {isEmpty &&
+                    <div>Нету тут ничего,братан,надо написать</div>
+                }
+                {isTooLong &&
+                    <div style={{color: "red"}}>Ну это ты лишка написал,братан, надо сократить</div>
+                }
             </div>
-            {tasks.length === 0 ? (
-                <p>Тасок нет</p>
-            ) : (
-                <ul>
-                    {tasks.map(task => {
-                        return (
-                            <li key={task.id}>
-                                <input type="checkbox" checked={task.isDone}/>
-                                <span>{task.title}</span>
-                                <Button title={'x'} onClick={() => deleteTask(task.id)}/>
-                            </li>
-                        )
-                    })}
-                </ul>
-            )}
+            {
+                tasks.length === 0 ? (
+                    <p>Тасок нет</p>
+                ) : (
+                    <ul>
+                        {tasks.map(task => {
+                            return (
+                                <li key={task.id}>
+                                    <input type="checkbox" checked={task.isDone}/>
+                                    <span>{task.title}</span>
+                                    <Button title={'x'} onClick={() => deleteTask(task.id)}/>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                )
+            }
             <div>
                 <Button title={'All'} onClick={() => changeFilter('all')}/>
                 <Button title={'Active'} onClick={() => changeFilter('active')}/>
