@@ -8,25 +8,24 @@ type Props = {
     tasks: Task[]
     deleteTask: (taskId: string) => void
     changeFilter: (filter: FilterValues) => void
-    createTask: (title: Task["title"]) => void
+    createTasks: (title: Task["title"]) => void
 }
 
 export const TodolistItem = ({
+                                 count,
                                  title,
                                  tasks,
                                  deleteTask,
                                  changeFilter,
-                                 createTask,
-                                 count,
+                                 createTasks,
                              }: Props) => {
-    const [inputTasks, setInputTasks] = useState("")
-    // alert(inputTasks)
-    const createTaskHandler = () => {
-        createTask(inputTasks)
-        setInputTasks("")
+    const [taskInput, setTasksInput] = useState("")
+    const createTasksHandler = () => {
+        createTasks(taskInput)
+        setTasksInput("")
     }
-    const isEmpty = inputTasks.length === 0
-    const isTooLong = inputTasks.length > 15
+    const isEmpty = taskInput.length === 0
+    const isTooLong = taskInput.length >= 15
     const isDisabled = isEmpty || isTooLong
     return (
         <div>
@@ -34,21 +33,22 @@ export const TodolistItem = ({
             <span>{count}</span>
             <div>
                 <input
-                    value={inputTasks}
-                    onChange={(e) => setInputTasks(e.currentTarget.value)}
+                    value={taskInput}
+                    onChange={(e) => setTasksInput(e.currentTarget.value)}
                     onKeyDown={(e) => {
                         if (e.key === "Enter") {
-                            createTaskHandler()
+                            createTasksHandler()
                         }
                     }}
                 />
                 <Button
                     title={'+'}
-                    onClick={createTaskHandler}
                     disabled={isDisabled}
-                />
-                {isEmpty && <div>Enter abc...</div>}
-                {isTooLong && <div style={{color: "red"}}>Too long</div>}
+                    onClick={() => {
+                        createTasksHandler()
+                    }}/>
+                {isEmpty && <div>Пусто тута</div>}
+                {isTooLong && <div style={{color:"red"}} >Слишком много символов, можно не более 15</div>}
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>

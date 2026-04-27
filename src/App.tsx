@@ -35,13 +35,13 @@ export const App = () => {
 
     const filteredTasks = getFilteredTasks(tasks, filter)
 
-    const createTask = (title: Task["title"]) => {
+    const createTasks = (title: Task["title"]) => {
         const newTask: Task = {
             id: v1(),
             title: title,
-            isDone: true,
+            isDone: false,
         }
-        const nextTasksState = [newTask, ...tasks]
+        const nextTasksState: Task[] = [newTask, ...tasks]
         setTasks(nextTasksState)
         tasksCounter.current = tasksCounter.current + 1
     }
@@ -52,7 +52,7 @@ export const App = () => {
                           tasks={filteredTasks}
                           deleteTask={deleteTask}
                           changeFilter={changeFilter}
-                          createTask={createTask}
+                          createTasks={createTasks}
                           count={tasksCounter.current}
             />
         </div>
