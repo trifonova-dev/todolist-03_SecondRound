@@ -1,9 +1,8 @@
 import './App.css'
-import {useState} from 'react'
+import {useRef, useState} from 'react'
 import {TodolistItem} from './TodolistItem'
 import {getFilteredTasks} from "./getFilteredTasks.ts";
 import {v1} from "uuid";
-import * as React from "react";
 
 export type Task = {
     id: string
@@ -15,7 +14,7 @@ export type FilterValues = 'all' | 'active' | 'completed'
 
 export const App = () => {
     const [filter, setFilter] = useState<FilterValues>('all')
-    const taskCounter = React.useRef(4)
+    const tasksCounter = useRef(4)
 
     const [tasks, setTasks] = useState<Task[]>([
         {id: v1(), title: 'HTML&CSS', isDone: true},
@@ -40,11 +39,11 @@ export const App = () => {
         const newTask: Task = {
             id: v1(),
             title: title,
-            isDone: false,
+            isDone: true,
         }
-        const newTasksState = [newTask, ...tasks]
-        setTasks(newTasksState)
-        taskCounter.current = taskCounter.current + 1
+        const nextTasksState = [newTask, ...tasks]
+        setTasks(nextTasksState)
+        tasksCounter.current = tasksCounter.current + 1
     }
 
     return (
@@ -54,7 +53,7 @@ export const App = () => {
                           deleteTask={deleteTask}
                           changeFilter={changeFilter}
                           createTask={createTask}
-                          count={taskCounter.current}
+                          count={tasksCounter.current}
             />
         </div>
     )

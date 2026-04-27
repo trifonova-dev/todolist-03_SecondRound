@@ -13,64 +13,58 @@ type Props = {
 
 export const TodolistItem = ({
                                  title,
-                                 count,
                                  tasks,
                                  deleteTask,
                                  changeFilter,
                                  createTask,
+                                 count,
                              }: Props) => {
-    const [inputTask, setInputTask] = useState("")
-    // alert(inputTask)
+    const [inputTasks, setInputTasks] = useState("")
+    // alert(inputTasks)
     const createTaskHandler = () => {
-        createTask(inputTask)
-        setInputTask("")
+        createTask(inputTasks)
+        setInputTasks("")
     }
-
-    const isEmpty = inputTask.length === 0
-    const isTooLong = inputTask.length >= 15
+    const isEmpty = inputTasks.length === 0
+    const isTooLong = inputTasks.length > 15
     const isDisabled = isEmpty || isTooLong
-
     return (
         <div>
             <h3>{title}</h3>
             <span>{count}</span>
             <div>
                 <input
-                    value={inputTask}
-                    onChange={(e) => setInputTask(e.currentTarget.value)}
+                    value={inputTasks}
+                    onChange={(e) => setInputTasks(e.currentTarget.value)}
                     onKeyDown={(e) => {
                         if (e.key === "Enter") {
                             createTaskHandler()
                         }
-                    }}/>
+                    }}
+                />
                 <Button
                     title={'+'}
+                    onClick={createTaskHandler}
                     disabled={isDisabled}
-                    onClick={createTaskHandler}/>
-                {isEmpty &&
-                    <div>Нету тут ничего,братан,надо написать</div>
-                }
-                {isTooLong &&
-                    <div style={{color: "red"}}>Ну это ты лишка написал,братан, надо сократить</div>
-                }
+                />
+                {isEmpty && <div>Enter abc...</div>}
+                {isTooLong && <div style={{color: "red"}}>Too long</div>}
             </div>
-            {
-                tasks.length === 0 ? (
-                    <p>Тасок нет</p>
-                ) : (
-                    <ul>
-                        {tasks.map(task => {
-                            return (
-                                <li key={task.id}>
-                                    <input type="checkbox" checked={task.isDone}/>
-                                    <span>{task.title}</span>
-                                    <Button title={'x'} onClick={() => deleteTask(task.id)}/>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                )
-            }
+            {tasks.length === 0 ? (
+                <p>Тасок нет</p>
+            ) : (
+                <ul>
+                    {tasks.map(task => {
+                        return (
+                            <li key={task.id}>
+                                <input type="checkbox" checked={task.isDone}/>
+                                <span>{task.title}</span>
+                                <Button title={'x'} onClick={() => deleteTask(task.id)}/>
+                            </li>
+                        )
+                    })}
+                </ul>
+            )}
             <div>
                 <Button title={'All'} onClick={() => changeFilter('all')}/>
                 <Button title={'Active'} onClick={() => changeFilter('active')}/>
