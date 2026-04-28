@@ -8,7 +8,7 @@ type Props = {
     tasks: Task[]
     deleteTask: (taskId: string) => void
     changeFilter: (filter: FilterValues) => void
-    createTasks: (title: Task["title"]) => void
+    createTask: (title: Task["title"]) => void
 }
 
 export const TodolistItem = ({
@@ -17,27 +17,30 @@ export const TodolistItem = ({
                                  tasks,
                                  deleteTask,
                                  changeFilter,
-                                 createTasks,
+                                 createTask,
                              }: Props) => {
-    const [taskInput, setTasksInput] = useState("")
-    const createTasksHandler = () => {
-        createTasks(taskInput)
-        setTasksInput("")
+    const [inputTask, setInputTask] = useState("")
+
+    const createTaskHandler = () => {
+        createTask(inputTask)
+        setInputTask("")
     }
-    const isEmpty = taskInput.length === 0
-    const isTooLong = taskInput.length >= 15
+
+    const isEmpty = inputTask.length === 0
+    const isTooLong = inputTask.length >= 15
     const isDisabled = isEmpty || isTooLong
+
     return (
         <div>
             <h3>{title}</h3>
             <span>{count}</span>
             <div>
                 <input
-                    value={taskInput}
-                    onChange={(e) => setTasksInput(e.currentTarget.value)}
+                    value={inputTask}
+                    onChange={(e) => setInputTask(e.currentTarget.value)}
                     onKeyDown={(e) => {
                         if (e.key === "Enter") {
-                            createTasksHandler()
+                            createTaskHandler()
                         }
                     }}
                 />
@@ -45,10 +48,10 @@ export const TodolistItem = ({
                     title={'+'}
                     disabled={isDisabled}
                     onClick={() => {
-                        createTasksHandler()
+                        createTaskHandler()
                     }}/>
-                {isEmpty && <div>Пусто тута</div>}
-                {isTooLong && <div style={{color:"red"}} >Слишком много символов, можно не более 15</div>}
+                {isEmpty && <div>No one...</div>}
+                {isTooLong && <div style={{color: "red"}}>Too Long</div>}
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
